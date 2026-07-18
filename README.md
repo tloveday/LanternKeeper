@@ -12,3 +12,5 @@ v0.0.0 Repository Created
 v0.1.0 Application Shell Created
 v0.2.0 Game Set Up View Complete
 v0.3.0 Village Gathering View Complete
+v0.4.0 Deal Roles Complete
+v0.4.1 Duplicate Role FIx

@@ -456,11 +456,12 @@ function showPlayerSetupScreen() {
 
             players.push({
 
-                name: name,
-                role: null,
-                alive: true
+    name: name,
+    role: null,
+    roleSlot: null,
+    alive: true
 
-            });
+});
 
             statusMessage = `${name} came home.`;
 
@@ -528,20 +529,28 @@ function buildRoleList() {
 
     if (gameSetup.alphaWerewolf) {
 
-        // Alpha replaces one normal Werewolf
-        roles.push("Alpha Werewolf");
+        roles.push({
+            id: "alpha-werewolf",
+            name: "Alpha Werewolf"
+        });
 
         for (let i = 1; i < gameSetup.werewolves; i++) {
 
-            roles.push("Werewolf");
+            roles.push({
+                id: `werewolf-${i}`,
+                name: "Werewolf"
+            });
 
         }
 
     } else {
 
-        for (let i = 0; i < gameSetup.werewolves; i++) {
+        for (let i = 1; i <= gameSetup.werewolves; i++) {
 
-            roles.push("Werewolf");
+            roles.push({
+                id: `werewolf-${i}`,
+                name: "Werewolf"
+            });
 
         }
 
@@ -553,25 +562,37 @@ function buildRoleList() {
 
     if (gameSetup.roles.seer) {
 
-        roles.push("Seer");
+        roles.push({
+            id: "seer",
+            name: "Seer"
+        });
 
     }
 
     if (gameSetup.roles.doctor) {
 
-        roles.push("Doctor");
+        roles.push({
+            id: "doctor",
+            name: "Doctor"
+        });
 
     }
 
     if (gameSetup.roles.witch) {
 
-        roles.push("Witch");
+        roles.push({
+            id: "witch",
+            name: "Witch"
+        });
 
     }
 
     if (gameSetup.roles.drunk) {
 
-        roles.push("Drunk");
+        roles.push({
+            id: "drunk",
+            name: "Drunk"
+        });
 
     }
 
@@ -583,7 +604,9 @@ function showRoleAssignmentScreen() {
 
     const roles = buildRoleList();
 
-    const assignedRoles = players.filter(player => player.role !== null).length;
+    const assignedRoles = roles.filter(role =>
+        players.some(player => player.roleSlot === role.id)
+    ).length;
 
     const allRolesAssigned = assignedRoles === roles.length;
 
@@ -591,22 +614,24 @@ function showRoleAssignmentScreen() {
 
     roles.forEach((role) => {
 
-        let playerOptions = `
-            <option value="">Select Player...</option>
-        `;
+        let playerOptions = `<option value="">Select Player...</option>`;
 
         players.forEach((player) => {
 
-            if (player.role === null || player.role === role) {
+            // Player is available if they have no role,
+            // or they already own THIS role slot.
 
-                const selected = player.role === role ? "selected" : "";
+            if (player.roleSlot === null || player.roleSlot === role.id) {
+
+                const selected = player.roleSlot === role.id
+                    ? "selected"
+                    : "";
 
                 playerOptions += `
                     <option value="${player.name}" ${selected}>
                         ${player.name}
                     </option>
                 `;
-
             }
 
         });
@@ -614,18 +639,17 @@ function showRoleAssignmentScreen() {
         roleListHTML += `
             <div style="margin-bottom:20px;">
 
-                <strong>${role}</strong>
+                <strong>${role.name}</strong>
 
                 <br><br>
 
                 <select
                     class="roleSelect"
-                    data-role="${role}"
+                    data-role-id="${role.id}"
+                    data-role-name="${role.name}"
                     style="width:100%;padding:10px;"
                 >
-
                     ${playerOptions}
-
                 </select>
 
             </div>
@@ -641,10 +665,6 @@ function showRoleAssignmentScreen() {
             <h1>Deal the Cards</h1>
 
             <hr><br>
-
-            <p>
-                Everyone should now have received a physical role card.
-            </p>
 
             ${roleListHTML}
 
@@ -676,40 +696,44 @@ function showRoleAssignmentScreen() {
 
         select.addEventListener("change", () => {
 
-            const role = select.dataset.role;
+            const roleId = select.dataset.roleId;
+            const roleName = select.dataset.roleName;
             const playerName = select.value;
 
-            // Remove this role from its current owner
+            // Remove this role slot from its current owner
 
             players.forEach((player) => {
 
-                if (player.role === role) {
+                if (player.roleSlot === roleId) {
 
                     player.role = null;
+                    player.roleSlot = null;
 
                 }
 
             });
 
-            // Remove any existing role from this player
+            // Remove any existing role from the selected player
 
             players.forEach((player) => {
 
                 if (player.name === playerName) {
 
                     player.role = null;
+                    player.roleSlot = null;
 
                 }
 
             });
 
-            // Assign the new role
+            // Assign the selected player to this role slot
 
             const selectedPlayer = players.find(player => player.name === playerName);
 
             if (selectedPlayer) {
 
-                selectedPlayer.role = role;
+                selectedPlayer.role = roleName;
+                selectedPlayer.roleSlot = roleId;
 
             }
 
@@ -736,8 +760,6 @@ function showRoleAssignmentScreen() {
     if (allRolesAssigned) {
 
         document.getElementById("beginGameBtn").addEventListener("click", () => {
-
-            // Everyone left becomes a Villager
 
             players.forEach((player) => {
 
