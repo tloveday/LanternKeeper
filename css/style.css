@@ -529,3 +529,75 @@ input:checked + .slider:before{
     margin-bottom:10px;
 
 }
+
+/* ========================================
+   NIGHT ORDER
+======================================== */
+
+.night-role{
+
+    font-size:1.4rem;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    margin:20px 0;
+
+}
+
+.night-role.werewolf{
+
+    color:#d32f2f;
+
+}
+
+.night-role.seer{
+
+    color:#2196f3;
+
+}
+
+.night-role.doctor{
+
+    color:#43a047;
+
+}
+
+.night-role.witch{
+
+    color:#8e24aa;
+
+}
+
+.night-script{
+
+    min-height:220px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    text-align:center;
+
+    line-height:1.7;
+
+    margin-bottom:20px;
+
+}
+
+.night-script p{
+
+    margin:8px 0;
+
+}
+
+.night-order button{
+
+    width:100%;
+
+    margin-top:auto;
+
+}

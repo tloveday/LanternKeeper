@@ -14,3 +14,8 @@ v0.2.0 Game Set Up View Complete
 v0.3.0 Village Gathering View Complete
 v0.4.0 Deal Roles Complete
 v0.4.1 Duplicate Role FIx
+v0.5.0 Intial Storyteller HUD Created
+v0.5.2 Players Widget Interaction
+v0.5.3 Game State Widget Function Complete
+v0.5.4 Timer Functionality
+v0.5.5 Night Order Widget Complete
