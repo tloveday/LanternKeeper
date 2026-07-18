@@ -23,6 +23,20 @@ const gameSetup = {
 const players = [];
 let statusMessage = "Ready to gather villagers.";
 
+const game = {
+
+    phase: "Day",
+
+    day: 1,
+
+    running: false,
+
+    secondsRemaining: 0,
+
+    discussionLength: 0
+
+};
+
 // ----------------------------
 // Render Helper
 // ----------------------------
@@ -781,6 +795,48 @@ function showRoleAssignmentScreen() {
 
 function showDashboard() {
 
+    const alivePlayers = players.filter(player => player.alive);
+
+    const aliveCount = alivePlayers.length;
+
+    const majority = Math.floor(aliveCount / 2) + 1;
+
+    const villagers = alivePlayers.filter(player =>
+        player.role !== "Werewolf" &&
+        player.role !== "Alpha Werewolf"
+    ).length;
+
+    const pack = players.filter(player =>
+        player.role === "Werewolf" ||
+        player.role === "Alpha Werewolf"
+    );
+
+    let packHTML = "";
+
+    pack.forEach((wolf) => {
+
+        let icon = "assets/images/icons/meeple.svg";
+
+        if (wolf.role === "Alpha Werewolf") {
+
+            icon = "assets/images/icons/alpha.svg";
+
+        }
+
+        const roleClass = wolf.alive ? "werewolf" : "dead";
+
+        packHTML += `
+
+            <img
+                src="${icon}"
+                class="pack-icon ${roleClass}"
+                alt="${wolf.role}"
+            >
+
+        `;
+
+    });
+
     let playersHTML = "";
 
     players.forEach((player) => {
@@ -821,7 +877,9 @@ function showDashboard() {
         }
 
         if (!player.alive) {
+
             roleClass = "dead";
+
         }
 
         playersHTML += `
@@ -838,7 +896,9 @@ function showDashboard() {
                     >
 
                     <span class="player-name">
+
                         ${player.name}
+
                     </span>
 
                 </div>
@@ -862,12 +922,62 @@ function showDashboard() {
 
     });
 
+    const phaseIcon = game.phase === "Day" ? "☀️" : "🌙";
+
     render(`
 
         <section class="dashboard">
 
             <div class="widget game-state">
+
                 <h2>Game State</h2>
+
+                <div class="game-stat hero-phase">
+
+                    <strong>
+
+                        ${phaseIcon} ${game.phase} ${game.day}
+
+                    </strong>
+
+                </div>
+
+                <div class="game-stat">
+
+                    <span>Players Alive</span>
+
+                    <strong>${aliveCount}</strong>
+
+                </div>
+
+                <div class="game-stat">
+
+                    <span>Majority</span>
+
+                    <strong>${majority}</strong>
+
+                </div>
+
+                <div class="game-stat">
+
+                    <span>Villagers</span>
+
+                    <strong>${villagers}</strong>
+
+                </div>
+
+                <div class="game-stat">
+
+                    <span>Pack</span>
+
+                    <div class="pack-row">
+
+                        ${packHTML}
+
+                    </div>
+
+                </div>
+
             </div>
 
             <div class="widget players">
@@ -883,11 +993,19 @@ function showDashboard() {
             </div>
 
             <div class="widget timer">
+
                 <h2>Timer</h2>
+
+                <button onclick="startDay()">Start Day</button>
+
+                <button onclick="startNight()">End Day</button>
+
             </div>
 
             <div class="widget night-order">
+
                 <h2>Night Order</h2>
+
             </div>
 
         </section>
@@ -898,9 +1016,7 @@ function showDashboard() {
 
         card.addEventListener("click", (event) => {
 
-            if (event.target.closest(".switch")) {
-                return;
-            }
+            if (event.target.closest(".switch")) return;
 
             const toggle = card.querySelector(".alive-toggle");
 
@@ -931,6 +1047,24 @@ function showDashboard() {
         });
 
     });
+
+}
+
+function startNight() {
+
+    game.phase = "Night";
+
+    showDashboard();
+
+}
+
+function startDay() {
+
+    game.phase = "Day";
+
+    game.day++;
+
+    showDashboard();
 
 }
 // ----------------------------
