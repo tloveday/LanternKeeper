@@ -29,13 +29,15 @@ const game = {
 
     day: 1,
 
+    discussionLength: 480,
+
+    secondsRemaining: 480,
+
     running: false,
 
-    secondsRemaining: 0,
+    discussionEnded: false
 
-    discussionLength: 0
-
-};
+};;
 
 // ----------------------------
 // Render Helper
@@ -922,7 +924,59 @@ function showDashboard() {
 
     });
 
+    const minutes = Math.floor(game.secondsRemaining / 60)
+        .toString()
+        .padStart(2, "0");
+
+    const seconds = (game.secondsRemaining % 60)
+        .toString()
+        .padStart(2, "0");
+
     const phaseIcon = game.phase === "Day" ? "☀️" : "🌙";
+
+    let timerButton = "";
+
+    if (!game.discussionEnded) {
+
+        if (game.running) {
+
+            timerButton = `
+
+                <button onclick="pauseDiscussion()">
+
+                    ⏸ Pause
+
+                </button>
+
+            `;
+
+        } else if (game.secondsRemaining === game.discussionLength) {
+
+            timerButton = `
+
+                <button onclick="startDiscussion()">
+
+                    ▶ Start
+
+                </button>
+
+            `;
+
+        } else {
+
+            timerButton = `
+
+                <button onclick="startDiscussion()">
+
+                    ▶ Resume
+
+                </button>
+
+            `;
+
+        }
+
+    }
 
     render(`
 
@@ -934,11 +988,7 @@ function showDashboard() {
 
                 <div class="game-stat hero-phase">
 
-                    <strong>
-
-                        ${phaseIcon} ${game.phase} ${game.day}
-
-                    </strong>
+                    <strong>${phaseIcon} ${game.phase} ${game.day}</strong>
 
                 </div>
 
@@ -996,9 +1046,23 @@ function showDashboard() {
 
                 <h2>Timer</h2>
 
-                <button onclick="startDay()">Start Day</button>
+                <div class="timer-display">
 
-                <button onclick="startNight()">End Day</button>
+                    <span class="timer-minutes">${minutes}</span>
+
+                    <span class="timer-colon">:</span>
+
+                    <span class="timer-seconds">${seconds}</span>
+
+                </div>
+
+                ${timerButton}
+
+                <button onclick="endDay()">
+
+                    🌙 End Day
+
+                </button>
 
             </div>
 
@@ -1050,7 +1114,65 @@ function showDashboard() {
 
 }
 
-function startNight() {
+let timerInterval = null;
+
+function startDiscussion() {
+
+    if (game.running || game.discussionEnded) return;
+
+    game.running = true;
+
+    showDashboard();
+
+    timerInterval = setInterval(() => {
+
+        if (game.secondsRemaining > 0) {
+
+            game.secondsRemaining--;
+
+            showDashboard();
+
+        }
+
+        if (game.secondsRemaining <= 0) {
+
+            clearInterval(timerInterval);
+
+            timerInterval = null;
+
+            game.running = false;
+
+            game.discussionEnded = true;
+
+            game.secondsRemaining = 0;
+
+            // TODO: Play bell sound
+
+            showDashboard();
+
+        }
+
+    }, 1000);
+
+}
+
+function pauseDiscussion() {
+
+    if (!game.running) return;
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    game.running = false;
+
+    showDashboard();
+
+}
+
+function endDay() {
+
+    pauseDiscussion();
 
     game.phase = "Night";
 
@@ -1063,6 +1185,76 @@ function startDay() {
     game.phase = "Day";
 
     game.day++;
+
+    game.running = false;
+
+    game.discussionEnded = false;
+
+    game.secondsRemaining = game.discussionLength;
+
+    showDashboard();
+
+}
+
+function startDiscussion() {
+
+    if (game.running) return;
+
+    game.running = true;
+
+    timerInterval = setInterval(() => {
+
+        if (game.secondsRemaining > 0) {
+
+            game.secondsRemaining--;
+
+            showDashboard();
+
+        } else {
+
+            clearInterval(timerInterval);
+
+            timerInterval = null;
+
+            game.running = false;
+
+            // Bell sound comes later
+
+        }
+
+    }, 1000);
+
+}
+
+function pauseDiscussion() {
+
+    if (!game.running) return;
+
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+    game.running = false;
+
+}
+
+function endDay() {
+
+    pauseDiscussion();
+
+    game.phase = "Night";
+
+    showDashboard();
+
+}
+
+function startDay() {
+
+    game.phase = "Day";
+
+    game.day++;
+
+    game.secondsRemaining = game.discussionLength;
 
     showDashboard();
 
