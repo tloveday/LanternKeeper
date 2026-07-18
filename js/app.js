@@ -783,25 +783,35 @@ function showDashboard() {
 
     render(`
 
-        <section>
+        <section class="dashboard">
 
-            <h1>Lantern Keeper</h1>
+            <div class="widget game-state">
 
-            <hr><br>
+                <h2>Game State</h2>
 
-            <h2>The Lantern is Lit</h2>
+            </div>
 
-            <p>
+            <div class="widget players">
 
-                The Storyteller Dashboard will be built here.
+                <h2>Players</h2>
 
-            </p>
+            </div>
+
+            <div class="widget timer">
+
+                <h2>Timer</h2>
+
+            </div>
+
+            <div class="widget night-order">
+
+                <h2>Night Order</h2>
+
+            </div>
 
         </section>
 
     `);
-
-    console.log(players);
 
 }
 // ----------------------------
