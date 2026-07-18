@@ -20,6 +20,9 @@ const gameSetup = {
     }
 };
 
+const players = [];
+let statusMessage = "Ready to gather villagers.";
+
 // ----------------------------
 // Render Helper
 // ----------------------------
@@ -53,7 +56,7 @@ function showHomeScreen() {
 }
 
 // ----------------------------
-// Setup Screen
+// Setup Screens
 // ----------------------------
 
 function showGameSetupScreen() {
@@ -93,7 +96,7 @@ function showGameSetupScreen() {
 
             <br><br>
 
-                        <hr><br>
+            <hr><br>
 
             <h3>Alpha Werewolf</h3>
 
@@ -103,7 +106,7 @@ function showGameSetupScreen() {
                     id="alphaWerewolf"
                     ${gameSetup.alphaWerewolf ? "checked" : ""}
                 >
-                Alpha Werewolf
+                Include Alpha Werewolf
             </label>
 
             <br><br>
@@ -157,21 +160,32 @@ function showGameSetupScreen() {
             <br><br>
 
             <hr><br>
-<h3>Discussion Time</h3>
 
-<button id="minusTimer">−</button>
+            <h3>Discussion Time</h3>
 
-<strong style="margin: 0 20px;">
-    ${gameSetup.discussionTime} Minutes
-</strong>
+            <button id="minusTimer">−</button>
 
-<button id="plusTimer">+</button>
+            <strong style="margin: 0 20px;">
+                ${gameSetup.discussionTime} Minutes
+            </strong>
 
-<br><br>
+            <button id="plusTimer">+</button>
+
+            <br><br>
 
             <hr><br>
 
-            <button id="nextBtn">Next</button>
+            <div style="display:flex;justify-content:space-between;">
+
+                <button id="cancelBtn">
+                    Cancel
+                </button>
+
+                <button id="nextBtn">
+                    Next →
+                </button>
+
+            </div>
 
         </section>
     `);
@@ -180,130 +194,309 @@ function showGameSetupScreen() {
     // Players
     // ----------------------------
 
-    document
-        .getElementById("minusPlayers")
-        .addEventListener("click", () => {
+    document.getElementById("minusPlayers").addEventListener("click", () => {
 
-            if (gameSetup.players > 5) {
-                gameSetup.players--;
-            }
-
-            showGameSetupScreen();
-
-        });
-
-    document
-        .getElementById("plusPlayers")
-        .addEventListener("click", () => {
-
-            if (gameSetup.players < 30) {
-                gameSetup.players++;
-            }
-
-            showGameSetupScreen();
-
-        });
-
-    // ----------------------------
-    // Werewolves
-    // ----------------------------
-
-    document
-        .getElementById("minusWolves")
-        .addEventListener("click", () => {
-
-            if (gameSetup.werewolves > 1) {
-                gameSetup.werewolves--;
-            }
-
-            showGameSetupScreen();
-
-        });
-
-    document
-        .getElementById("plusWolves")
-        .addEventListener("click", () => {
-
-            if (gameSetup.werewolves < 6) {
-                gameSetup.werewolves++;
-            }
-
-            showGameSetupScreen();
-
-        });
-
-
-        // ----------------------------
-    // Alpha Werewolf
-    // ----------------------------
-
-    document
-        .getElementById("alphaWerewolf")
-        .addEventListener("change", (event) => {
-
-            gameSetup.alphaWerewolf = event.target.checked;
-
-        });
-
-    // ----------------------------
-    // Special Roles
-    // ----------------------------
-
-    document
-        .getElementById("seerRole")
-        .addEventListener("change", (event) => {
-
-            gameSetup.roles.seer = event.target.checked;
-
-        });
-
-    document
-        .getElementById("doctorRole")
-        .addEventListener("change", (event) => {
-
-            gameSetup.roles.doctor = event.target.checked;
-
-        });
-
-    document
-        .getElementById("witchRole")
-        .addEventListener("change", (event) => {
-
-            gameSetup.roles.witch = event.target.checked;
-
-        });
-
-    document
-        .getElementById("drunkRole")
-        .addEventListener("change", (event) => {
-
-            gameSetup.roles.drunk = event.target.checked;
-
-        });
-        
-     // ----------------------------
-// Discussion Timer
-// ----------------------------
-
-document
-    .getElementById("minusTimer")
-    .addEventListener("click", () => {
-
-        if (gameSetup.discussionTime > 5) {
-            gameSetup.discussionTime -= 5;
+        if (gameSetup.players > 5) {
+            gameSetup.players--;
         }
 
         showGameSetupScreen();
 
     });
 
-document
-    .getElementById("plusTimer")
-    .addEventListener("click", () => {
+    document.getElementById("plusPlayers").addEventListener("click", () => {
 
-        if (gameSetup.discussionTime < 30) {
-            gameSetup.discussionTime += 5;
+        if (gameSetup.players < 30) {
+            gameSetup.players++;
         }
+
+        showGameSetupScreen();
+
+    });
+
+    // ----------------------------
+    // Werewolves
+    // ----------------------------
+
+    document.getElementById("minusWolves").addEventListener("click", () => {
+
+        if (gameSetup.werewolves > 1) {
+            gameSetup.werewolves--;
+        }
+
+        showGameSetupScreen();
+
+    });
+
+    document.getElementById("plusWolves").addEventListener("click", () => {
+
+        if (gameSetup.werewolves < 6) {
+            gameSetup.werewolves++;
+        }
+
+        showGameSetupScreen();
+
+    });
+
+    // ----------------------------
+    // Alpha
+    // ----------------------------
+
+    document.getElementById("alphaWerewolf").addEventListener("change", (event) => {
+
+        gameSetup.alphaWerewolf = event.target.checked;
+
+    });
+
+    // ----------------------------
+    // Roles
+    // ----------------------------
+
+    document.getElementById("seerRole").addEventListener("change", (event) => {
+
+        gameSetup.roles.seer = event.target.checked;
+
+    });
+
+    document.getElementById("doctorRole").addEventListener("change", (event) => {
+
+        gameSetup.roles.doctor = event.target.checked;
+
+    });
+
+    document.getElementById("witchRole").addEventListener("change", (event) => {
+
+        gameSetup.roles.witch = event.target.checked;
+
+    });
+
+    document.getElementById("drunkRole").addEventListener("change", (event) => {
+
+        gameSetup.roles.drunk = event.target.checked;
+
+    });
+
+    // ----------------------------
+    // Discussion Timer
+    // ----------------------------
+
+    document.getElementById("minusTimer").addEventListener("click", () => {
+
+        if (gameSetup.discussionTime > 3) {
+            gameSetup.discussionTime--;
+        }
+
+        showGameSetupScreen();
+
+    });
+
+    document.getElementById("plusTimer").addEventListener("click", () => {
+
+        if (gameSetup.discussionTime < 15) {
+            gameSetup.discussionTime++;
+        }
+
+        showGameSetupScreen();
+
+    });
+
+    // ----------------------------
+    // Cancel
+    // ----------------------------
+
+    document.getElementById("cancelBtn").addEventListener("click", () => {
+
+        showHomeScreen();
+
+    });
+
+    // ----------------------------
+    // Next
+    // ----------------------------
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+
+        showPlayerSetupScreen();
+
+    });
+
+}
+
+function showPlayerSetupScreen() {
+
+    players.sort((a, b) => a.name.localeCompare(b.name));
+
+    let playerListHTML = "";
+
+    if (players.length === 0) {
+
+        playerListHTML = "<p><em>No villagers have gathered yet.</em></p>";
+
+    } else {
+
+        players.forEach((player, index) => {
+
+            playerListHTML += `
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+
+                    <span>${player.name}</span>
+
+                    <button class="deletePlayerBtn" data-index="${index}">
+                        Delete
+                    </button>
+
+                </div>
+            `;
+
+        });
+
+    }
+
+    render(`
+        <section>
+
+            <p><strong>Step 2 of 3</strong></p>
+
+            <h1>Gather the Villagers</h1>
+
+            <hr><br>
+
+            <h3>Players Added</h3>
+
+            <p>
+                ${players.length} / ${gameSetup.players}
+            </p>
+
+            <p><em>${statusMessage}</em></p>
+
+            <hr><br>
+
+            <input
+                id="playerName"
+                type="text"
+                placeholder="Enter player name..."
+                style="width:100%;padding:10px;"
+            >
+
+            <br><br>
+
+            <hr><br>
+
+            ${playerListHTML}
+
+            <hr><br>
+
+            <div style="display:flex;justify-content:space-between;">
+
+                <button id="previousBtn">
+                    ← Previous
+                </button>
+
+                <button
+                    id="nextPhaseBtn"
+                    ${players.length === gameSetup.players ? "" : "disabled"}
+                >
+                    Next →
+                </button>
+
+            </div>
+
+        </section>
+    `);
+
+    // ----------------------------
+    // Player Name Input
+    // ----------------------------
+
+    const playerName = document.getElementById("playerName");
+
+    playerName.focus();
+
+    playerName.addEventListener("keydown", (event) => {
+
+        if (event.key === "Enter") {
+
+            if (players.length >= gameSetup.players) {
+
+                statusMessage = "The village is already full.";
+
+                showPlayerSetupScreen();
+
+                return;
+
+            }
+
+            const name = playerName.value.trim();
+
+            if (name === "") {
+
+                statusMessage = "Please enter a player's name.";
+
+                showPlayerSetupScreen();
+
+                return;
+
+            }
+
+            const duplicatePlayer = players.find((player) =>
+                player.name.toLowerCase() === name.toLowerCase()
+            );
+
+            if (duplicatePlayer) {
+
+                statusMessage = `${duplicatePlayer.name} is already home.`;
+
+                playerName.value = "";
+
+                showPlayerSetupScreen();
+
+                return;
+
+            }
+
+            players.push({
+
+                name: name,
+                role: null,
+                alive: true
+
+            });
+
+            statusMessage = `${name} came home.`;
+
+            showPlayerSetupScreen();
+
+        }
+
+    });
+
+    // ----------------------------
+    // Delete Player
+    // ----------------------------
+
+    document.querySelectorAll(".deletePlayerBtn").forEach((button) => {
+
+        button.addEventListener("click", () => {
+
+            const index = Number(button.dataset.index);
+
+            const removedPlayer = players[index].name;
+
+            players.splice(index, 1);
+
+            statusMessage = `${removedPlayer} left the village.`;
+
+            showPlayerSetupScreen();
+
+        });
+
+    });
+
+    // ----------------------------
+    // Previous
+    // ----------------------------
+
+    document.getElementById("previousBtn").addEventListener("click", () => {
 
         showGameSetupScreen();
 
@@ -313,16 +506,17 @@ document
     // Next
     // ----------------------------
 
-    document
-        .getElementById("nextBtn")
-        .addEventListener("click", () => {
+    if (players.length === gameSetup.players) {
 
-            alert("Player Setup Screen");
+        document.getElementById("nextPhaseBtn").addEventListener("click", () => {
+
+            alert("Role Assignment Screen");
 
         });
 
-}
+    }
 
+}
 // ----------------------------
 // Start Application
 // ----------------------------
