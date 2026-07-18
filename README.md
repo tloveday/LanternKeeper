@@ -9,3 +9,6 @@ Splash Screen: The Lantern Keeper
 
 Version History:
 v0.0.0 Repository Created
+v0.1.0 Application Shell Created
+v0.2.0 Game Set Up View Complete
+v0.3.0 Village Gathering View Complete

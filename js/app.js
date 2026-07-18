@@ -503,18 +503,283 @@ function showPlayerSetupScreen() {
     });
 
     // ----------------------------
-    // Next
+// Next
+// ----------------------------
+
+if (players.length === gameSetup.players) {
+
+    document.getElementById("nextPhaseBtn").addEventListener("click", () => {
+
+        showRoleAssignmentScreen();
+
+    });
+
+}
+
+}
+
+function buildRoleList() {
+
+    const roles = [];
+
+    // ----------------------------
+    // Werewolves
     // ----------------------------
 
-    if (players.length === gameSetup.players) {
+    if (gameSetup.alphaWerewolf) {
 
-        document.getElementById("nextPhaseBtn").addEventListener("click", () => {
+        // Alpha replaces one normal Werewolf
+        roles.push("Alpha Werewolf");
 
-            alert("Role Assignment Screen");
+        for (let i = 1; i < gameSetup.werewolves; i++) {
+
+            roles.push("Werewolf");
+
+        }
+
+    } else {
+
+        for (let i = 0; i < gameSetup.werewolves; i++) {
+
+            roles.push("Werewolf");
+
+        }
+
+    }
+
+    // ----------------------------
+    // Special Roles
+    // ----------------------------
+
+    if (gameSetup.roles.seer) {
+
+        roles.push("Seer");
+
+    }
+
+    if (gameSetup.roles.doctor) {
+
+        roles.push("Doctor");
+
+    }
+
+    if (gameSetup.roles.witch) {
+
+        roles.push("Witch");
+
+    }
+
+    if (gameSetup.roles.drunk) {
+
+        roles.push("Drunk");
+
+    }
+
+    return roles;
+
+}
+
+function showRoleAssignmentScreen() {
+
+    const roles = buildRoleList();
+
+    const assignedRoles = players.filter(player => player.role !== null).length;
+
+    const allRolesAssigned = assignedRoles === roles.length;
+
+    let roleListHTML = "";
+
+    roles.forEach((role) => {
+
+        let playerOptions = `
+            <option value="">Select Player...</option>
+        `;
+
+        players.forEach((player) => {
+
+            if (player.role === null || player.role === role) {
+
+                const selected = player.role === role ? "selected" : "";
+
+                playerOptions += `
+                    <option value="${player.name}" ${selected}>
+                        ${player.name}
+                    </option>
+                `;
+
+            }
+
+        });
+
+        roleListHTML += `
+            <div style="margin-bottom:20px;">
+
+                <strong>${role}</strong>
+
+                <br><br>
+
+                <select
+                    class="roleSelect"
+                    data-role="${role}"
+                    style="width:100%;padding:10px;"
+                >
+
+                    ${playerOptions}
+
+                </select>
+
+            </div>
+        `;
+
+    });
+
+    render(`
+        <section>
+
+            <p><strong>Step 3 of 3</strong></p>
+
+            <h1>Deal the Cards</h1>
+
+            <hr><br>
+
+            <p>
+                Everyone should now have received a physical role card.
+            </p>
+
+            ${roleListHTML}
+
+            <hr><br>
+
+            <div style="display:flex;justify-content:space-between;">
+
+                <button id="previousBtn">
+                    ← Previous
+                </button>
+
+                <button
+                    id="beginGameBtn"
+                    ${allRolesAssigned ? "" : "disabled"}
+                >
+                    Light the Way
+                </button>
+
+            </div>
+
+        </section>
+    `);
+
+    // ----------------------------
+    // Role Assignment
+    // ----------------------------
+
+    document.querySelectorAll(".roleSelect").forEach((select) => {
+
+        select.addEventListener("change", () => {
+
+            const role = select.dataset.role;
+            const playerName = select.value;
+
+            // Remove this role from its current owner
+
+            players.forEach((player) => {
+
+                if (player.role === role) {
+
+                    player.role = null;
+
+                }
+
+            });
+
+            // Remove any existing role from this player
+
+            players.forEach((player) => {
+
+                if (player.name === playerName) {
+
+                    player.role = null;
+
+                }
+
+            });
+
+            // Assign the new role
+
+            const selectedPlayer = players.find(player => player.name === playerName);
+
+            if (selectedPlayer) {
+
+                selectedPlayer.role = role;
+
+            }
+
+            showRoleAssignmentScreen();
+
+        });
+
+    });
+
+    // ----------------------------
+    // Previous
+    // ----------------------------
+
+    document.getElementById("previousBtn").addEventListener("click", () => {
+
+        showPlayerSetupScreen();
+
+    });
+
+    // ----------------------------
+    // Light the Way
+    // ----------------------------
+
+    if (allRolesAssigned) {
+
+        document.getElementById("beginGameBtn").addEventListener("click", () => {
+
+            // Everyone left becomes a Villager
+
+            players.forEach((player) => {
+
+                if (player.role === null) {
+
+                    player.role = "Villager";
+
+                }
+
+            });
+
+            showDashboard();
 
         });
 
     }
+
+}
+
+function showDashboard() {
+
+    render(`
+
+        <section>
+
+            <h1>Lantern Keeper</h1>
+
+            <hr><br>
+
+            <h2>The Lantern is Lit</h2>
+
+            <p>
+
+                The Storyteller Dashboard will be built here.
+
+            </p>
+
+        </section>
+
+    `);
+
+    console.log(players);
 
 }
 // ----------------------------
