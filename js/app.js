@@ -781,37 +781,156 @@ function showRoleAssignmentScreen() {
 
 function showDashboard() {
 
+    let playersHTML = "";
+
+    players.forEach((player) => {
+
+        let roleClass = "villager";
+        let icon = "assets/images/icons/meeple.svg";
+
+        switch (player.role) {
+
+            case "Werewolf":
+                roleClass = "werewolf";
+                break;
+
+            case "Alpha Werewolf":
+                roleClass = "werewolf";
+                icon = "assets/images/icons/alpha.svg";
+                break;
+
+            case "Seer":
+                roleClass = "seer";
+                break;
+
+            case "Doctor":
+                roleClass = "doctor";
+                break;
+
+            case "Witch":
+                roleClass = "witch";
+                break;
+
+            case "Drunk":
+                roleClass = "drunk";
+                break;
+
+            default:
+                roleClass = "villager";
+
+        }
+
+        if (!player.alive) {
+            roleClass = "dead";
+        }
+
+        playersHTML += `
+
+            <div class="player-card ${player.alive ? "" : "player-dead"}"
+                 data-player="${player.name}">
+
+                <div class="player-left">
+
+                    <img
+                        src="${icon}"
+                        class="role-icon ${roleClass}"
+                        alt="${player.role}"
+                    >
+
+                    <span class="player-name">
+                        ${player.name}
+                    </span>
+
+                </div>
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        class="alive-toggle"
+                        data-player="${player.name}"
+                        ${player.alive ? "checked" : ""}
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+        `;
+
+    });
+
     render(`
 
         <section class="dashboard">
 
             <div class="widget game-state">
-
                 <h2>Game State</h2>
-
             </div>
 
             <div class="widget players">
 
                 <h2>Players</h2>
 
+                <div class="players-grid">
+
+                    ${playersHTML}
+
+                </div>
+
             </div>
 
             <div class="widget timer">
-
                 <h2>Timer</h2>
-
             </div>
 
             <div class="widget night-order">
-
                 <h2>Night Order</h2>
-
             </div>
 
         </section>
 
     `);
+
+    document.querySelectorAll(".player-card").forEach((card) => {
+
+        card.addEventListener("click", (event) => {
+
+            if (event.target.closest(".switch")) {
+                return;
+            }
+
+            const toggle = card.querySelector(".alive-toggle");
+
+            toggle.checked = !toggle.checked;
+
+            toggle.dispatchEvent(new Event("change"));
+
+        });
+
+    });
+
+    document.querySelectorAll(".alive-toggle").forEach((toggle) => {
+
+        toggle.addEventListener("change", () => {
+
+            const player = players.find(
+                p => p.name === toggle.dataset.player
+            );
+
+            if (player) {
+
+                player.alive = toggle.checked;
+
+                showDashboard();
+
+            }
+
+        });
+
+    });
 
 }
 // ----------------------------

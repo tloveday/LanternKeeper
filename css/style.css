@@ -196,3 +196,225 @@ button:hover {
     grid-row: 2;
 
 }
+
+/* ========================================
+   PLAYERS WIDGET
+======================================== */
+
+.players-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+}
+
+.player-card{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#252525;
+
+    border:1px solid #313131;
+
+    border-radius:10px;
+
+    padding:10px 14px;
+
+    min-height:48px;
+
+    transition:all .18s ease;
+
+    cursor:pointer;
+
+}
+
+.player-card:hover{
+
+    border-color:#666;
+
+    background:#2b2b2b;
+
+}
+
+.player-card:active{
+
+    transform:scale(.985);
+
+}
+
+.player-dead{
+
+    opacity:.75;
+
+}
+.player-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.role-icon{
+
+    width:24px;
+    height:24px;
+
+    flex-shrink:0;
+
+    transition:.25s ease;
+
+    filter:none;
+
+}
+.player-name{
+
+    font-size:1rem;
+
+    font-weight:600;
+
+    color:#f2f2f2;
+
+    user-select:none;
+
+}
+
+/* ========================================
+   ROLE COLOURS
+======================================== */
+
+.villager{
+
+    filter:brightness(0) saturate(100%)
+    invert(100%) sepia(0%) saturate(0%) hue-rotate(180deg);
+
+}
+
+.werewolf{
+
+    filter:brightness(0) saturate(100%)
+    invert(18%) sepia(92%) saturate(3600%)
+    hue-rotate(348deg);
+
+}
+
+.seer{
+
+    filter:brightness(0) saturate(100%)
+    invert(33%) sepia(93%) saturate(2050%)
+    hue-rotate(194deg);
+
+}
+
+.doctor{
+
+    filter:brightness(0) saturate(100%)
+    invert(45%) sepia(83%) saturate(620%)
+    hue-rotate(83deg);
+
+}
+
+.witch{
+
+    filter:brightness(0) saturate(100%)
+    invert(22%) sepia(79%) saturate(2500%)
+    hue-rotate(279deg);
+
+}
+
+.drunk{
+
+    filter:brightness(0) saturate(100%)
+    invert(81%) sepia(69%) saturate(820%)
+    hue-rotate(358deg);
+
+}
+
+.dead{
+
+    filter:grayscale(100%) brightness(25%);
+
+}
+
+/* ========================================
+   LIGHT SWITCH
+======================================== */
+
+.switch{
+
+    position:relative;
+
+    display:inline-block;
+
+    width:34px;
+
+    height:18px;
+
+}
+
+.switch input{
+
+    opacity:0;
+
+    width:0;
+
+    height:0;
+
+}
+
+.slider{
+
+    position:absolute;
+
+    inset:0;
+
+    background:#505050;
+
+    border-radius:30px;
+
+    transition:.2s;
+
+}
+
+.slider:before{
+
+    position:absolute;
+
+    content:"";
+
+    width:14px;
+
+    height:14px;
+
+    left:2px;
+
+    top:2px;
+
+    background:white;
+
+    border-radius:50%;
+
+    transition:.2s;
+
+}
+
+input:checked + .slider{
+
+    background:#43A047;
+
+}
+
+input:checked + .slider:before{
+
+    transform:translateX(16px);
+
+}
