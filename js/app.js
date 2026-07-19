@@ -796,7 +796,9 @@ function showRoleAssignmentScreen() {
     }
 
 }
-
+// ----------------------------
+// Dashboard
+// ----------------------------
 function showDashboard() {
 
     const alivePlayers = players.filter(player => player.alive);
