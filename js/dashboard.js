@@ -1,3 +1,71 @@
+// ----------------------------
+// Game State Widget
+// ----------------------------
+
+function renderGameStateWidget(
+    phaseIcon,
+    aliveCount,
+    majority,
+    villagers,
+    packHTML
+) {
+
+    return `
+
+        <div class="widget game-state">
+
+            <h2>Game State</h2>
+
+            <div class="game-stat hero-phase">
+
+                <strong>${phaseIcon} ${game.phase} ${game.day}</strong>
+
+            </div>
+
+            <div class="game-stat">
+
+                <span>Players Alive</span>
+
+                <strong>${aliveCount}</strong>
+
+            </div>
+
+            <div class="game-stat">
+
+                <span>Majority</span>
+
+                <strong>${majority}</strong>
+
+            </div>
+
+            <div class="game-stat">
+
+                <span>Villagers</span>
+
+                <strong>${villagers}</strong>
+
+            </div>
+
+            <div class="game-stat">
+
+                <span>Pack</span>
+
+                <div class="pack-row">
+
+                    ${packHTML}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+// ----------------------------
+// Night Order Widget
+// ----------------------------
 function renderNightOrderWidget() {
 
     if (game.phase !== "Night") {
