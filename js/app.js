@@ -1006,43 +1006,9 @@ function showDashboard() {
 
     `);
 
-        document.querySelectorAll(".player-card").forEach((card) => {
+    initialisePlayerEvents();
 
-        card.addEventListener("click", (event) => {
-
-            if (event.target.closest(".switch")) return;
-
-            const toggle = card.querySelector(".alive-toggle");
-
-            toggle.checked = !toggle.checked;
-
-            toggle.dispatchEvent(new Event("change"));
-
-        });
-
-    });
-
-    document.querySelectorAll(".alive-toggle").forEach((toggle) => {
-
-        toggle.addEventListener("change", () => {
-
-            const player = players.find(
-                p => p.name === toggle.dataset.player
-            );
-
-            if (player) {
-
-                player.alive = toggle.checked;
-
-                showDashboard();
-
-            }
-
-        });
-
-    });
-
-}
+    }
 
 let timerInterval = null;
 
