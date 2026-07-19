@@ -19,3 +19,5 @@ v0.5.2 Players Widget Interaction
 v0.5.3 Game State Widget Function Complete
 v0.5.4 Timer Functionality
 v0.5.5 Night Order Widget Complete
+
+v0.6.0 Refactoring Begins install dashboard.js
