@@ -994,47 +994,11 @@ function showDashboard() {
 
             ${renderPlayersWidget(playersHTML)}
 
-            <div class="widget timer">
-
-                <h2>Timer</h2>
-
-                ${game.phase === "Day" ? `
-
-                    <div class="timer-display">
-
-                        <span class="timer-minutes">${minutes}</span>
-
-                        <span class="timer-colon">:</span>
-
-                        <span class="timer-seconds">${seconds}</span>
-
-                    </div>
-
-                    ${timerButton}
-
-                    <button onclick="endDay()">
-
-                                            🌙 End Day
-
-                    </button>
-
-                ` : `
-
-                    <div class="timer-display">
-
-                        🌙
-
-                    </div>
-
-                    <p class="night-message">
-
-                        The village sleeps...
-
-                    </p>
-
-                `}
-
-            </div>
+            ${renderTimerWidget(
+                minutes,
+                seconds,
+                timerButton
+            )}
 
             ${renderNightOrderWidget()}
 
@@ -1042,7 +1006,7 @@ function showDashboard() {
 
     `);
 
-    document.querySelectorAll(".player-card").forEach((card) => {
+        document.querySelectorAll(".player-card").forEach((card) => {
 
         card.addEventListener("click", (event) => {
 

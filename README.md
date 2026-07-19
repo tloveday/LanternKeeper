@@ -24,3 +24,4 @@ v0.6.0 Refactoring Begins install dashboard.js
 v0.6.1 RenderNightOrderWidget Refactored to dashboard.js
 v0.6.2 Game State Widget Refactored to dashboard.js
 v0.6.3 Players Widget Refactored to dashboard.js
+v0.6.4 Timer Widget Refactored to dashboard.js
