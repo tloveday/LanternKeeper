@@ -992,58 +992,49 @@ function showDashboard() {
                 packHTML
             )}
 
-            <div class="widget players">
+            ${renderPlayersWidget(playersHTML)}
 
-                <h2>Players</h2>
+            <div class="widget timer">
 
-                <div class="players-grid">
+                <h2>Timer</h2>
 
-                    ${playersHTML}
+                ${game.phase === "Day" ? `
 
-                </div>
+                    <div class="timer-display">
+
+                        <span class="timer-minutes">${minutes}</span>
+
+                        <span class="timer-colon">:</span>
+
+                        <span class="timer-seconds">${seconds}</span>
+
+                    </div>
+
+                    ${timerButton}
+
+                    <button onclick="endDay()">
+
+                                            🌙 End Day
+
+                    </button>
+
+                ` : `
+
+                    <div class="timer-display">
+
+                        🌙
+
+                    </div>
+
+                    <p class="night-message">
+
+                        The village sleeps...
+
+                    </p>
+
+                `}
 
             </div>
-
-           <div class="widget timer">
-
-    <h2>Timer</h2>
-
-    ${game.phase === "Day" ? `
-
-        <div class="timer-display">
-
-            <span class="timer-minutes">${minutes}</span>
-
-            <span class="timer-colon">:</span>
-
-            <span class="timer-seconds">${seconds}</span>
-
-        </div>
-
-        ${timerButton}
-
-        <button onclick="endDay()">
-                    🌙 End Day
-
-        </button>
-
-    ` : `
-
-        <div class="timer-display">
-
-            🌙
-
-        </div>
-
-        <p class="night-message">
-
-            The village sleeps...
-
-        </p>
-
-    `}
-
-</div>
 
             ${renderNightOrderWidget()}
 

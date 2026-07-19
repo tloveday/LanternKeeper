@@ -64,6 +64,28 @@ function renderGameStateWidget(
 
 }
 // ----------------------------
+// player Widget
+// ----------------------------
+function renderPlayersWidget(playersHTML) {
+
+    return `
+
+        <div class="widget players">
+
+            <h2>Players</h2>
+
+            <div class="players-grid">
+
+                ${playersHTML}
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+// ----------------------------
 // Night Order Widget
 // ----------------------------
 function renderNightOrderWidget() {
