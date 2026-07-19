@@ -21,3 +21,4 @@ v0.5.4 Timer Functionality
 v0.5.5 Night Order Widget Complete
 
 v0.6.0 Refactoring Begins install dashboard.js
+v0.6.1 RenderNightOrderWidget Refactored to dashboard.js
